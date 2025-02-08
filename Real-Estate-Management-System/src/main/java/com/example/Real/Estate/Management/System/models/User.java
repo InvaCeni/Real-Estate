@@ -63,9 +63,11 @@ public class User {
         this.role = role;
     }
 
+
     public enum Role {
         ADMIN, AGENT, CUSTOMER
     }
+
 }
 
 
