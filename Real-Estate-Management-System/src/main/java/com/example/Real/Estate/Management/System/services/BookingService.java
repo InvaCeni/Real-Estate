@@ -18,3 +18,8 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 }
+
+//This class is a service layer component that acts as an intermediary between
+// the controller and repository layers in your Spring Boot application.
+// The BookingService handles the business logic related to Booking entities and
+// uses the BookingRepository to interact with the database.

@@ -1,33 +1,37 @@
 package com.example.Real.Estate.Management.System.models;
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "properties")
-@Getter
-@Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class Property {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String description;
-    private BigDecimal price;
+    private String name;
     private String location;
+    private Double price;
+    private String type;
+    private Long agentId;
 
-    @Enumerated(EnumType.STRING)
-    private PropertyStatus status;
+    private String description;
+    private String status;
+    private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "agent_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User agent;
-}
 
-enum PropertyStatus {
-    AVAILABLE, SOLD, RENTED
+    public enum PropertyCategory {
+        APARTAMENT,
+        VILLA,
+        COMMERCIAL,
+        LAND
+    }
 }

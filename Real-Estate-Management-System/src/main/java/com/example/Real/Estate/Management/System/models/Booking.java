@@ -33,3 +33,10 @@ public class Booking {
 enum BookingStatus {
     PENDING, CONFIRMED, DECLINED
 }
+
+
+//This class represents a booking in the
+// Real Estate Management System. It models a
+// customer requesting to visit or book a property
+// and stores the details related to that booking,
+// including the property, customer, booking time, and status.

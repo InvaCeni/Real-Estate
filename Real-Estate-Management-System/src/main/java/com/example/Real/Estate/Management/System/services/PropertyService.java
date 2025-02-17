@@ -17,4 +17,7 @@ public class PropertyService {
     public List<Property> getAllProperties() {
         return propertyRepository.findAll();
     }
+
 }
+
+

@@ -7,3 +7,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
 }
+
+
+//This interface is a Spring Data JPA repository for the User entity. It extends JpaRepository
+// and is responsible for performing CRUD operations and querying the User entity in the database.
+
+//important for managing user data, especially for authentication and user management purposes.
