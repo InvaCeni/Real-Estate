@@ -2,6 +2,7 @@ package com.example.Real.Estate.Management.System.controllers;
 
 import com.example.Real.Estate.Management.System.models.Property;
 import com.example.Real.Estate.Management.System.request.PropertyRequest;
+import com.example.Real.Estate.Management.System.request.PropertySearchRequest;
 import com.example.Real.Estate.Management.System.services.PropertyService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +44,29 @@ public class PropertyController {
 
     //TODO 3: UPDATE PROPERTY
 
+    @PutMapping("/update/{propertyId}")
+    public ResponseEntity<Property> updateProperty(
+            @PathVariable Long propertyId,
+            @RequestBody PropertyRequest propertyRequest) {
+
+        Property updatedProperty = propertyService.updateProperty(propertyId, propertyRequest);
+        return ResponseEntity.ok(updatedProperty);
+    }
 
 
     //TODO: DELETE PROPERTY
+
+    @DeleteMapping("/delete/{propertyId}")
+    public ResponseEntity<Void> deleteProperty(@PathVariable Long propertyId) {
+        propertyService.deleteProperty(propertyId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Property>> searchProperties(@RequestBody PropertySearchRequest searchRequest) {
+        List<Property> properties = propertyService.searchProperties(searchRequest);
+        return ResponseEntity.ok(properties);
+    }
 }
 
 
