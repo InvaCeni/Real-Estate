@@ -6,6 +6,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
     @Id
@@ -19,7 +21,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;  // 'admin', 'agent', or 'customer'
 
-    // Getters and setters
 
     public Long getId() {
         return id;
@@ -38,7 +39,7 @@ public class User {
     }
 
     public String getEmail() {
-        return email;  // Return the email field
+        return email;
     }
 
     public void setEmail(String email) {
@@ -46,25 +47,29 @@ public class User {
     }
 
     public String getPassword() {
-        return password;  // Return the password field
+        return password;
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public Role getRole() {
-        return role;  // Return the role field
+        return role;  
     }
 
     public void setRole(Role role) {
         this.role = role;
     }
 
+
     public enum Role {
-        admin, agent, customer
+        ADMIN, AGENT, CUSTOMER
     }
 }
 
 
 
+//This class represents a user in the Real Estate Management System, which can be an ADMIN, AGENT, or CUSTOMER.
+// It includes essential user attributes such as name, email, password, and role, as well as methods for setting
+// and getting these attributes. The password is stored securely using BCryptPasswordEncoder.

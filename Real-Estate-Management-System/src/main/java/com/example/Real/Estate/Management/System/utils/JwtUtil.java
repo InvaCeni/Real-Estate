@@ -38,3 +38,7 @@ public class JwtUtil {
         }
     }
 }
+
+//The JwtUtil class is a utility class responsible for generating, validating, and extracting information
+// from JSON Web Tokens (JWTs). It uses the io.jsonwebtoken library to create and verify JWTs, which are commonly
+// used for handling user authentication in a stateless manner.
