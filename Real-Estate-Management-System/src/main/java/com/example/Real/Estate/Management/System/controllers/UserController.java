@@ -39,6 +39,3 @@ public class UserController {
     }
 }
 
-//This class is a REST controller responsible for managing user-related actions,
-// such as retrieving a list of users. It interacts with the UserService to handle
-// the core business logic related to users.mainly focused on reading user data, such as retrieving a list of users.

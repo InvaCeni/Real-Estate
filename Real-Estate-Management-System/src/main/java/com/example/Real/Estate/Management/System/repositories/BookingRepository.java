@@ -3,7 +3,14 @@ package com.example.Real.Estate.Management.System.repositories;
 import com.example.Real.Estate.Management.System.models.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BookingRepository extends JpaRepository<Booking, Long> { }
+import java.util.List;
+
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+
+        List<Booking> findByPropertyId(Long propertyId);
+        List<Booking> findByCustomerId(Long customerId);
+
+}
 
 //This interface is a Spring Data JPA repository for the Booking entity.
 // It extends the JpaRepository interface, which provides built-in methods
