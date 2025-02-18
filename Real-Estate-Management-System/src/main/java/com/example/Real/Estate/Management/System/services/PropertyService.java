@@ -3,6 +3,7 @@ package com.example.Real.Estate.Management.System.services;
 import com.example.Real.Estate.Management.System.models.Property;
 import com.example.Real.Estate.Management.System.repositories.PropertyRepository;
 import com.example.Real.Estate.Management.System.request.PropertyRequest;
+import com.example.Real.Estate.Management.System.request.PropertySearchRequest;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,4 +107,15 @@ public class PropertyService {
     public List<Property> getPropertiesByLocation(String location) {
         return propertyRepository.findByLocation(location);
     }
+
+    public List<Property> searchProperties(PropertySearchRequest searchRequest) {
+        return propertyRepository.searchProperties(
+                searchRequest.getLocation(),
+                searchRequest.getMinPrice(),
+                searchRequest.getMaxPrice(),
+                searchRequest.getPropertyType(),
+                searchRequest.getIsAvailable()
+        );
+    }
+
 }

@@ -12,15 +12,3 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
 }
 
-//This interface is a Spring Data JPA repository for the Booking entity.
-// It extends the JpaRepository interface, which provides built-in methods
-// for CRUD (Create, Read, Update, Delete) operations and querying the Booking
-// entity in the database.
-
-//By extending JpaRepository, BookingRepository inherits various methods such as:
-//
-//save(): To save or update a Booking.
-//findById(): To find a Booking by its id.
-//findAll(): To find all Booking entries in the database.
-//delete(): To delete a Booking.
-//count(): To get the number of Booking records.
