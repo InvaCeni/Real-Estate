@@ -1,15 +1,20 @@
 package com.example.Real.Estate.Management.System.services;
 
+
+import com.example.Real.Estate.Management.System.request.PropertyCreateRequest;
+import com.example.Real.Estate.Management.System.request.PropertyGetQueryRequest;
+import com.example.Real.Estate.Management.System.request.PropertyUpdateRequest;
 import com.example.Real.Estate.Management.System.models.Property;
 import com.example.Real.Estate.Management.System.repositories.PropertyRepository;
-import com.example.Real.Estate.Management.System.request.PropertyRequest;
-import com.example.Real.Estate.Management.System.request.PropertySearchRequest;
-import org.hibernate.service.spi.ServiceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PropertyService {
@@ -17,105 +22,127 @@ public class PropertyService {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    public PropertyService(PropertyRepository propertyRepository) {
-        this.propertyRepository = propertyRepository;
-    }
-
-    public List<Property> getAllProperties() {
-        return propertyRepository.findAll();
-    }
-
-    public Property createProperty(PropertyRequest propertyRequest) {
-        if (propertyRequest == null) {
-            throw new ServiceException("Null request");
-        }
-
+    public Property createProperty(PropertyCreateRequest request) {
         Property property = new Property();
-        property.setName(propertyRequest.getName());
-        property.setLocation(propertyRequest.getLocation());
-        property.setPrice(propertyRequest.getPrice());
-        property.setAgentId(propertyRequest.getAgentId());
-        property.setDescription(propertyRequest.getDescription());
-        property.setStatus(propertyRequest.getStatus());
-        property.setImageUrl(propertyRequest.getImageUrl());
-        property.setCategory(propertyRequest.getCategory());
 
-        return propertyRepository.saveAndFlush(property);
+        if (request.getName() != null) {
+            property.setName(request.getName());
+        }
+
+        if (request.getDescription() != null) {
+            property.setDescription(request.getDescription());
+        }
+
+        if (request.getAddress() != null) {
+            property.setAddress(request.getAddress());
+        }
+
+        if (request.getBedrooms() != null) {
+            property.setBedrooms(request.getBedrooms());
+        }
+
+        if (request.getBathrooms() != null) {
+            property.setBathrooms(request.getBathrooms());
+        }
+
+        if (request.getPrice() != null) {
+            property.setPrice(request.getPrice());
+        }
+
+        if (request.isParking() != null) {
+            property.setParking(request.isParking());
+        }
+
+        if (request.isFurnished() != null) {
+            property.setFurnished(request.isFurnished());
+        }
+
+        if (request.getUserId() != null) {
+            property.setUserId(request.getUserId());
+        }
+
+        if (request.getImageUrls() != null) {
+            property.setImageUrls(request.getImageUrls());
+        }
+
+
+        return propertyRepository.save(property);
     }
 
-    public Property updateProperty(Long propertyId, PropertyRequest propertyRequest) {
-        Optional<Property> existingProperty = propertyRepository.findById(propertyId);
-
-        if (!existingProperty.isPresent()) {
-            throw new ServiceException("Property does not exist");
-        }
-
-        Property responseProperty = existingProperty.get();
-
-        if (propertyRequest == null) {
-            throw new ServiceException("Null request");
-        }
-
-        if (propertyRequest.getName() != null && !propertyRequest.getName().isEmpty()) {
-            responseProperty.setName(propertyRequest.getName());
-        }
-        if (propertyRequest.getLocation() != null && !propertyRequest.getLocation().isEmpty()) {
-            responseProperty.setLocation(propertyRequest.getLocation());
-        }
-        if (propertyRequest.getPrice() != 0.0) {
-            responseProperty.setPrice(propertyRequest.getPrice());
-        }
-        if (propertyRequest.getCategory() != null && !propertyRequest.getCategory().isEmpty()) {
-            responseProperty.setCategory(propertyRequest.getCategory());
-        }
-        if (propertyRequest.getAgentId() != null) {
-            responseProperty.setAgentId(propertyRequest.getAgentId());
-        }
-        if (propertyRequest.getDescription() != null && !propertyRequest.getDescription().isEmpty()) {
-            responseProperty.setDescription(propertyRequest.getDescription());
-        }
-
-        if (propertyRequest.getStatus() != null && !propertyRequest.getStatus().isEmpty()) {
-            responseProperty.setStatus(propertyRequest.getStatus());
-        }
-        if (propertyRequest.getImageUrl() != null && !propertyRequest.getImageUrl().isEmpty()) {
-            responseProperty.setImageUrl(propertyRequest.getImageUrl());
-        }
-        if (propertyRequest.getCategory() != null && !propertyRequest.getCategory().isEmpty()) {
-            responseProperty.setCategory(propertyRequest.getCategory());
-        }
-
-        propertyRepository.save(responseProperty);
-        return responseProperty;
+    public void deleteProperty(Long id) {
+        propertyRepository.deleteById(id);
     }
 
-    public int deleteProperty(Long propertyId) {
-        Optional<Property> existingProperty = propertyRepository.findById(propertyId);
+    public Property updateProperty(Long id, PropertyUpdateRequest request) {
+        Property property = propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
 
-        if (!existingProperty.isPresent()) {
-            throw new ServiceException("Property does not exist");
+        // Check if request attributes are not null before updating
+        if (request.getName() != null) {
+            property.setName(request.getName());
         }
 
-        try {
-            propertyRepository.deleteById(propertyId);
-            return 1;
-        } catch (Exception e) {
-            return 0;
+        if (request.getDescription() != null) {
+            property.setDescription(request.getDescription());
         }
+
+        if (request.getAddress() != null) {
+            property.setAddress(request.getAddress());
+        }
+
+        if (request.getBedrooms() != null) {
+            property.setBedrooms(request.getBedrooms());
+        }
+
+        if (request.getBathrooms() != null) {
+            property.setBathrooms(request.getBathrooms());
+        }
+
+        if (request.getPrice() != null) {
+            property.setPrice(request.getPrice());
+        }
+
+        if (request.isParking() != null) {
+            property.setParking(request.isParking());
+        }
+
+        if (request.isFurnished() != null) {
+            property.setFurnished(request.isFurnished());
+        }
+
+        if (request.getUrls() != null) {
+            property.setImageUrls(request.getUrls());
+        }
+        return propertyRepository.save(property);
     }
 
-    public List<Property> getPropertiesByLocation(String location) {
-        return propertyRepository.findByLocation(location);
+    public Property getProperty(Long id) {
+
+
+        return propertyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Property not found"));
     }
 
-    public List<Property> searchProperties(PropertySearchRequest searchRequest) {
-        return propertyRepository.searchProperties(
-                searchRequest.getLocation(),
-                searchRequest.getMinPrice(),
-                searchRequest.getMaxPrice(),
-                searchRequest.getPropertyType(),
-                searchRequest.getIsAvailable()
+
+    public Property[] searchAndFilterProperties(PropertyGetQueryRequest request, boolean[] furnishedValues, boolean[] parkingValues) {
+
+
+        Sort sort = Sort.by(request.getOrder().equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, request.getSort());
+        int startIndex = Math.max(request.getStartIndex(), 0);
+        int pageSize = Math.max(request.getLimit(), 1);
+
+
+        int pageIndex = startIndex / pageSize;
+        int pageOffset = startIndex % pageSize;
+
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+        Page<Property> pageResult = propertyRepository.findByNameContainingIgnoreCaseAndFurnishedInAndParkingIn(
+                request.getSearchTerm(), furnishedValues, parkingValues, pageable
         );
-    }
 
+        List<Property> property = pageResult.getContent().subList(pageOffset, pageResult.getContent().size());
+
+        return property.toArray(new Property[0]);
+    }
 }

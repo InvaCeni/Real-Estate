@@ -1,15 +1,10 @@
 package com.example.Real.Estate.Management.System.models;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.time.Instant;
+import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Data
 @Table(name = "properties")
 public class Property {
 
@@ -17,16 +12,68 @@ public class Property {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
-    private String location;
-    private Double price;
-    private String category;
-    private Long agentId;
-    private String description;
-    private String status;
-    private String imageUrl;
-    private boolean isAvailable;
 
+    @Column(nullable = false, length = 1000)
+    private String description;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(name = "price", nullable = false)
+    private Double price;
+
+    @Column(nullable = false)
+    private Integer bathrooms;
+
+    @Column(nullable = false)
+    private Integer bedrooms;
+
+    @Column(nullable = false)
+    private Boolean furnished;
+
+    @Column(nullable = false)
+    private Boolean parking;
+
+    @ElementCollection
+    @CollectionTable(name = "listing_image_urls", joinColumns = @JoinColumn(name = "property_id"))
+    @OrderColumn(name = "image_order")
+    @Column(name = "image_url")
+    private List<String> imageUrls;
+
+    @Column(name = "userId", nullable = false)
+    private String userId;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+    public Property() {
+        this.name = "Default Name";
+        this.description = "Default Description";
+        this.address = "123, Bouzereah 44521";
+        this.price = 0.0;
+        this.bathrooms = 0;
+        this.bedrooms = 0;
+        this.furnished = false;
+        this.parking = false;
+        this.imageUrls = List.of("https://i.imgur.com/n6B1Fuw.jpg", "https://i.imgur.com/n6B1Fuw.jpg");
+        this.userId = "1";
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;
@@ -44,12 +91,20 @@ public class Property {
         this.name = name;
     }
 
-    public String getLocation() {
-        return location;
+    public String getDescription() {
+        return description;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Double getPrice() {
@@ -60,70 +115,88 @@ public class Property {
         this.price = price;
     }
 
-    public String getCategory() {
-        return category;
+
+    public Integer getBathrooms() {
+        return bathrooms;
     }
 
-    public void setCategory(String type) {
-        this.category = type;
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
     }
 
-    public Long getAgentId() {
-        return agentId;
+    public Integer getBedrooms() {
+        return bedrooms;
     }
 
-    public void setAgentId(Long agentId) {
-        this.agentId = agentId;
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
     }
 
-    public String getDescription() {
-        return description;
+    public Boolean getFurnished() {
+        return furnished;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setFurnished(Boolean furnished) {
+        this.furnished = furnished;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getParking() {
+        return parking;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setParking(Boolean parking) {
+        this.parking = parking;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+
+    public List<String> getImageUrls() {
+        return imageUrls;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
-    public User getAgent() {
-        return agent;
+    public String getUserId() {
+        return userId;
     }
 
-    public boolean getIsAvailable() {
-        return isAvailable;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setIsAvailable(boolean isAvailable) {
-        this.isAvailable = isAvailable;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setAgent(User agent) {
-        this.agent = agent;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User agent;
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public enum PropertyCategory {
-        APARTAMENT,
-        VILLA,
-        COMMERCIAL,
-        LAND
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Property{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", bathrooms=" + bathrooms +
+                ", bedrooms=" + bedrooms +
+                ", furnished=" + furnished +
+                ", parking=" + parking +
+                ", imageUrls=" + imageUrls +
+                ", userId='" + userId + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }
