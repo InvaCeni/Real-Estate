@@ -67,6 +67,7 @@ public class PropertyService {
 
 
         return propertyRepository.save(property);
+
     }
 
     public void deleteProperty(Long id) {

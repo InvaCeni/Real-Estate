@@ -1,5 +1,8 @@
 package com.example.Real.Estate.Management.System.models;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
 import java.util.List;
@@ -10,24 +13,30 @@ public class Property {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(message = "User ID is required")
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "Name is required")
     private String name;
 
     @Column(nullable = false, length = 1000)
+    @NotBlank(message = "Description is required")
     private String description;
 
     @Column(nullable = false)
+    @NotBlank(message = "Address is required")
     private String address;
 
     @Column(name = "price", nullable = false)
     private Double price;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "Bathrooms must be at least 1")
     private Integer bathrooms;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "Bedrooms must be at least 1")
     private Integer bedrooms;
 
     @Column(nullable = false)
