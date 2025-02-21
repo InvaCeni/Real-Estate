@@ -1,44 +1,92 @@
 package com.example.Real.Estate.Management.System.utils;
+import com.example.Real.Estate.Management.System.enums.Role;
+import com.example.Real.Estate.Management.System.models.User;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import io.jsonwebtoken.security.Keys;
 
-import java.security.Key;
-import java.util.Date;
+
+import javax.crypto.SecretKey;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Component
 public class JwtUtil {
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long EXPIRATION_TIME = 86400000; // 24 hours
 
-    public String generateToken(String email, String role) {
+    @Value("${app.jwt.secret-key}")
+    private String jwtSecretKey;
+
+    @Value("${app.jwt.expiration-ms}")
+    private long jwtExpirationMs;
+
+    public String generateToken(User user) {
+
+        Date expiration = new Date(System.currentTimeMillis() + (10 * 365 * 24 * 60 * 60 * 1000));
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
+
+        Map<String, String> claims = new HashMap<>();
+        claims.put("userId",String.valueOf(user.getId()));
+        claims.put("role", user.getRole());
+
         return Jwts.builder()
-                .setSubject(email)
-                .claim("role", role)
+                .setSubject(user.getUsername())
+                .setIssuer("self")
+                .setClaims(claims)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .setExpiration(expiration)
                 .signWith(key)
                 .compact();
     }
 
-    public Claims extractClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    public boolean isAdmin(String token){
+        String tokenRole = getRoleFromToken(token); // Extract role from the token
+        return tokenRole.equals(Role.ADMIN.name());
     }
 
-    public String extractEmail(String token) {
-        return extractClaims(token).getSubject();
+    public boolean isAgent(String token){
+        String tokenRole = getRoleFromToken(token); // Extract role from the token
+        return tokenRole.equals(Role.AGENT.name());
     }
 
-    public boolean validateToken(String token) {
+    private Claims extractClaims(String token) {
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
+
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public Long getUserIdFromToken(String token) {
+        Claims claims = extractClaims(token);
+        return Long.parseLong(claims.get("userId").toString());
+    }
+
+    public String getRoleFromToken(String token) {
+        Claims claims = extractClaims(token);
+        return claims.get("role").toString();
+    }
+
+    public boolean isGuest(String token){
+            String tokenRole = getRoleFromToken(token); // Extract role from the token
+            return tokenRole.equals(Role.GUEST.name()); // Compare with required role
+    }
+    public boolean isTokenValid(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-            return true;
+            Claims claims = extractClaims(token);
+            Date expiration = claims.getExpiration();
+            return expiration.after(new Date());
+        } catch (ExpiredJwtException e) {
+            return false;
         } catch (Exception e) {
             return false;
         }
     }
-}
 
-//The JwtUtil class is a utility class responsible for generating, validating, and extracting information
-// from JSON Web Tokens (JWTs). It uses the io.jsonwebtoken library to create and verify JWTs, which are commonly
-// used for handling user authentication in a stateless manner.
+}

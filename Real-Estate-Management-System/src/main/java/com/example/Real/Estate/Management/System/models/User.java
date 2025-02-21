@@ -1,26 +1,67 @@
 package com.example.Real.Estate.Management.System.models;
-import jakarta.annotation.Resource;
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.example.Real.Estate.Management.System.enums.Role;
+import jakarta.persistence.*;
+
+import java.time.Instant;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;  // 'admin', 'agent', or 'customer'
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'")
+    private String avatar;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
+
+    @Column(name = "role")
+    private String role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Property> properties;
+
+    // No-argument constructor with default values
+    public User() {
+        this.avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
+
+    public User(String username, String email, String password, Role role) {
+        this();
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role.name();
+    }
+
+
+    public User(String username, String email, String password, String avatar) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;
@@ -30,12 +71,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -51,26 +92,52 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = new BCryptPasswordEncoder().encode(password);
+        this.password = password;
     }
 
-    public Role getRole() {
-        return role;  
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setRole(Role role) {
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
         this.role = role;
     }
 
-
-    public enum Role {
-        ADMIN, AGENT, CUSTOMER
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
-
 }
 
-
-
-//This class represents a user in the Real Estate Management System, which can be an ADMIN, AGENT, or CUSTOMER.
-// It includes essential user attributes such as name, email, password, and role, as well as methods for setting
-// and getting these attributes. The password is stored securely using BCryptPasswordEncoder.
