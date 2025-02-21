@@ -4,6 +4,7 @@ import com.example.Real.Estate.Management.System.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -34,6 +35,9 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Property> properties;
+
     // No-argument constructor with default values
     public User() {
         this.avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
@@ -48,6 +52,7 @@ public class User {
         this.password = password;
         this.role = role.name();
     }
+
 
     public User(String username, String email, String password, String avatar) {
         this.username = username;

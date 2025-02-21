@@ -75,9 +75,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUser(@PathVariable Long id,
                                                @CookieValue(name = "access_token") String accessTokenCookie) {
         try {
-            Jws<Claims> claimsJws = jwtTokenProvider.validateToken(accessTokenCookie);
-            User user = userService.getUser(id);
-            return ResponseEntity.ok(new ApiResponse(true, user, null ,"User fetched successfully"));
+            if(jwtTokenProvider.isTokenValid(accessTokenCookie)) {
+                User user = userService.getUser(id);
+                return ResponseEntity.ok(new ApiResponse(true, user, null ,"User fetched successfully"));
+            }
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, null, null,  "Token is not valid"));
         } catch (JwtException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, null, null,  "Token is not valid"));
         } catch (Exception e) {

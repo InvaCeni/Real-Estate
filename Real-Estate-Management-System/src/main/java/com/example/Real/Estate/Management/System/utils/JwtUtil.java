@@ -3,12 +3,17 @@ import com.example.Real.Estate.Management.System.enums.Role;
 import com.example.Real.Estate.Management.System.models.User;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.security.Keys;
 
 
 import javax.crypto.SecretKey;
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Component
 public class JwtUtil {
@@ -24,101 +29,64 @@ public class JwtUtil {
         Date expiration = new Date(System.currentTimeMillis() + (10 * 365 * 24 * 60 * 60 * 1000));
         SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
 
+        Map<String, String> claims = new HashMap<>();
+        claims.put("userId",String.valueOf(user.getId()));
+        claims.put("role", user.getRole());
 
         return Jwts.builder()
                 .setSubject(user.getUsername())
-                .setIssuer(user.getRole())
+                .setIssuer("self")
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact();
-
-
     }
 
     public boolean isAdmin(String token){
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String tokenRole = claims.getIssuer(); // Extract role from the token
-
-            return tokenRole.equals(Role.ADMIN.name()); // Compare with required role
-
-        } catch (ExpiredJwtException e) {
-            System.out.println("Token expired!");
-        } catch (MalformedJwtException e) {
-            System.out.println("Invalid token format!");
-        } catch (SignatureException e) {
-            System.out.println("Invalid token signature!");
-        } catch (Exception e) {
-            System.out.println("Token validation failed!");
-        }
-        return false; // Return false if validation fails
+        String tokenRole = getRoleFromToken(token); // Extract role from the token
+        return tokenRole.equals(Role.ADMIN.name());
     }
 
     public boolean isAgent(String token){
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String tokenRole = claims.getIssuer(); // Extract role from the token
-
-            return tokenRole.equals(Role.AGENT.name()); // Compare with required role
-
-        } catch (ExpiredJwtException e) {
-            System.out.println("Token expired!");
-        } catch (MalformedJwtException e) {
-            System.out.println("Invalid token format!");
-        } catch (SignatureException e) {
-            System.out.println("Invalid token signature!");
-        } catch (Exception e) {
-            System.out.println("Token validation failed!");
-        }
-        return false; // Return false if validation fails
+        String tokenRole = getRoleFromToken(token); // Extract role from the token
+        return tokenRole.equals(Role.AGENT.name());
     }
 
-    public boolean isGuest(String token){
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
-        try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String tokenRole = claims.getIssuer(); // Extract role from the token
-
-            return tokenRole.equals(Role.GUEST.name()); // Compare with required role
-
-        } catch (ExpiredJwtException e) {
-            System.out.println("Token expired!");
-        } catch (MalformedJwtException e) {
-            System.out.println("Invalid token format!");
-        } catch (SignatureException e) {
-            System.out.println("Invalid token signature!");
-        } catch (Exception e) {
-            System.out.println("Token validation failed!");
-        }
-        return false; // Return false if validation fails
-    }
-
-    public Jws<Claims> validateToken(String token) {
+    private Claims extractClaims(String token) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecretKey.getBytes());
 
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(token);
+                .parseClaimsJws(token)
+                .getBody();
+    }
 
+    public Long getUserIdFromToken(String token) {
+        Claims claims = extractClaims(token);
+        return Long.parseLong(claims.get("userId").toString());
+    }
+
+    public String getRoleFromToken(String token) {
+        Claims claims = extractClaims(token);
+        return claims.get("role").toString();
+    }
+
+    public boolean isGuest(String token){
+            String tokenRole = getRoleFromToken(token); // Extract role from the token
+            return tokenRole.equals(Role.GUEST.name()); // Compare with required role
+    }
+    public boolean isTokenValid(String token) {
+        try {
+            Claims claims = extractClaims(token);
+            Date expiration = claims.getExpiration();
+            return expiration.after(new Date());
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

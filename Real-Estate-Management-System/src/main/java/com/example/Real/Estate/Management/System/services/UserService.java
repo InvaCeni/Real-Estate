@@ -43,7 +43,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return PropertyRepository.findByUserId(user.getId().toString());
+        return PropertyRepository.findByUser(user);
     }
 
     public User getUser(Long id) {

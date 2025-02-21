@@ -11,7 +11,6 @@ public class PropertyCreateRequest {
     private Double price;
     private Boolean parking;
     private Boolean furnished;
-    private String userId;
 
     private List<String> imageUrls;
 
@@ -96,14 +95,6 @@ public class PropertyCreateRequest {
         this.furnished = furnished;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     @Override
     public String toString() {
         return "PropertyCreateRequest{" +
@@ -115,7 +106,6 @@ public class PropertyCreateRequest {
                 ", price=" + price +
                 ", parking=" + parking +
                 ", furnished=" + furnished +
-                ", userId='" + userId + '\'' +
                 '}';
     }
 }

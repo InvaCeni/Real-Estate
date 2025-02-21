@@ -1,6 +1,7 @@
 package com.example.Real.Estate.Management.System.services;
 
 
+import com.example.Real.Estate.Management.System.models.User;
 import com.example.Real.Estate.Management.System.request.PropertyCreateRequest;
 import com.example.Real.Estate.Management.System.request.PropertyGetQueryRequest;
 import com.example.Real.Estate.Management.System.request.PropertyUpdateRequest;
@@ -22,7 +23,7 @@ public class PropertyService {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    public Property createProperty(PropertyCreateRequest request) {
+    public Property createProperty(PropertyCreateRequest request, Long currentUserId) {
         Property property = new Property();
 
         if (request.getName() != null) {
@@ -57,18 +58,18 @@ public class PropertyService {
             property.setFurnished(request.isFurnished());
         }
 
-        if (request.getUserId() != null) {
-            property.setUserId(request.getUserId());
-        }
+        User currentUser = new User();
+        currentUser.setId(currentUserId);
+        property.setUser(currentUser);
 
         if (request.getImageUrls() != null) {
             property.setImageUrls(request.getImageUrls());
         }
 
-
         return propertyRepository.save(property);
 
     }
+
 
     public void deleteProperty(Long id) {
         propertyRepository.deleteById(id);
@@ -78,7 +79,7 @@ public class PropertyService {
         Property property = propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Property not found"));
 
-        // Check if request attributes are not null before updating
+
         if (request.getName() != null) {
             property.setName(request.getName());
         }
@@ -146,4 +147,7 @@ public class PropertyService {
 
         return property.toArray(new Property[0]);
     }
+
+
+
 }

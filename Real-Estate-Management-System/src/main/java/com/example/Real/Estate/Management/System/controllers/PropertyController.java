@@ -5,8 +5,7 @@ import com.example.Real.Estate.Management.System.request.PropertyCreateRequest;
 import com.example.Real.Estate.Management.System.request.PropertyGetQueryRequest;
 import com.example.Real.Estate.Management.System.request.PropertyUpdateRequest;
 import com.example.Real.Estate.Management.System.models.Property;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +33,11 @@ public class PropertyController {
     public ResponseEntity<ApiResponse> createProperty(@RequestBody PropertyCreateRequest request,
                                                       @CookieValue(name = "access_token") String accessTokenCookie) {
         try {
+            if(request == null || accessTokenCookie == null || accessTokenCookie.isEmpty()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(false, null, null, "Check input data."));
+            }
             if (jwtTokenProvider.isAdmin(accessTokenCookie) || jwtTokenProvider.isAgent(accessTokenCookie)) {
-                Property createdProperty = propertyService.createProperty(request);
+                Property createdProperty = propertyService.createProperty(request, jwtTokenProvider.getUserIdFromToken(accessTokenCookie));
                 return ResponseEntity.ok(new ApiResponse(true, null, List.of(createdProperty), "Property created successfully"));
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(false, null, null, "Token is not valid"));
@@ -68,6 +70,7 @@ public class PropertyController {
                                                       @CookieValue(name = "access_token") String accessTokenCookie) {
         try {
             if (jwtTokenProvider.isAdmin(accessTokenCookie) || jwtTokenProvider.isAgent(accessTokenCookie)) {
+                // Update the property
                 Property updatedProperty = propertyService.updateProperty(id, request);
                 return ResponseEntity.ok(new ApiResponse(true, null, List.of(updatedProperty), "Property updated successfully"));
             }

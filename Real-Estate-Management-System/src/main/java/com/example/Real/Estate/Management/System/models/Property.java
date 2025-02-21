@@ -13,7 +13,6 @@ public class Property {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(message = "User ID is required")
     private Long id;
 
     @Column(nullable = false)
@@ -51,8 +50,9 @@ public class Property {
     @Column(name = "image_url")
     private List<String> imageUrls;
 
-    @Column(name = "userId", nullable = false)
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -70,7 +70,6 @@ public class Property {
         this.furnished = false;
         this.parking = false;
         this.imageUrls = List.of("https://i.imgur.com/n6B1Fuw.jpg", "https://i.imgur.com/n6B1Fuw.jpg");
-        this.userId = "1";
     }
 
     @PrePersist
@@ -166,12 +165,12 @@ public class Property {
         this.imageUrls = imageUrls;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Instant getCreatedAt() {
@@ -203,7 +202,6 @@ public class Property {
                 ", furnished=" + furnished +
                 ", parking=" + parking +
                 ", imageUrls=" + imageUrls +
-                ", userId='" + userId + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
