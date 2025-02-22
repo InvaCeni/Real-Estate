@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - VIEWS REAL ESTATE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="font-inter bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+<!-- Navigation -->
+<nav class="py-4 px-6 flex justify-between items-center bg-white shadow-sm">
+    <a href="/" class="text-xl font-bold">VIEWS REAL ESTATE</a>
+    <div class="flex items-center space-x-6">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <a href="/login" class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800">Log in</a>
+    </div>
+</nav>
+
+<!-- Signup Container -->
+<div class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="flex flex-col md:flex-row">
+            <!-- Left Side - Form -->
+            <div class="md:w-1/2 p-8 md:p-12">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
+                    <p class="text-gray-600">Join our real estate community</p>
+                </div>
+
+                <!-- Google Signup -->
+                <button onclick="initializeGoogleSignup()"
+                        class="w-full bg-white border-2 border-gray-300 rounded-lg px-4 py-3 mb-6 hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span>Continue with Google</span>
+                </button>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">or</span>
+                    </div>
+                </div>
+
+                <!-- Email Signup Form -->
+                <form th:action="@{/api/auth/signup}" method="post" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                            <input type="text"
+                                   id="username"
+                                   name="username"
+                                   required
+                                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email"
+                                   id="email"
+                                   name="email"
+                                   required
+                                   class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700 mb-1">I want to</label>
+                        <select id="role"
+                                name="role"
+                                required
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                            <option value="USER">Find a property</option>
+                            <option value="AGENT">List properties as an agent</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password"
+                               id="password"
+                               name="password"
+                               required
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                    </div>
+
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <input type="password"
+                               id="confirmPassword"
+                               name="confirmPassword"
+                               required
+                               class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-colors">
+                    </div>
+
+                    <div class="flex items-start">
+                        <input type="checkbox"
+                               id="terms"
+                               name="terms"
+                               required
+                               class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="terms" class="ml-2 block text-sm text-gray-700">
+                            I agree to the
+                            <a href="/terms" class="text-blue-600 hover:text-blue-500">Terms of Service</a>
+                            and
+                            <a href="/privacy" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                        Create Account
+                    </button>
+                </form>
+
+                <p class="mt-6 text-center text-sm text-gray-600">
+                    Already have an account?
+                    <a href="/login" class="font-medium text-blue-600 hover:text-blue-500">Log in</a>
+                </p>
+            </div>
+
+            <!-- Right Side - Content -->
+            <div class="md:w-1/2 bg-blue-600 p-12 hidden md:flex items-center justify-center relative overflow-hidden">
+                <div class="relative z-10 text-white text-center">
+                    <h3 class="text-2xl font-bold mb-4">Start Your Journey</h3>
+                    <p class="text-blue-100 mb-6">Create an account to explore premium properties and connect with top real estate agents.</p>
+                    <ul class="text-left space-y-4">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Save favorite properties
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Get personalized recommendations
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Connect with real estate agents
+                        </li>
+                    </ul>
+                </div>
+                <div class="absolute inset-0 opacity-10">
+                    <svg class="w-full h-full" viewBox="0 0 100 100" fill="none">
+                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" stroke-width="0.5"/>
+                        </pattern>
+                        <rect width="100" height="100" fill="url(#grid)"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validation
+    const form = document.querySelector('form');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (password.value !== confirmPassword.value) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        // Submit form if validation passes
+        handleSignup(new FormData(form));
+    });
+
+    async function handleSignup(formData) {
+        try {
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.get('username'),
+                    email: formData.get('email'),
+                    password: formData.get('password'),
+                    role: formData.get('role')
+                })
+            });
+
+            if (response.ok) {
+                window.location.href = '/login?registered=true';
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Signup failed');
+            }
+        } catch (error) {
+            console.error('Error during signup:', error);
+            alert('An error occurred during signup');
+        }
+    }
+
+    // Google signup
+    function initializeGoogleSignup() {
+        google.accounts.id.initialize({
+            client_id: 'YOUR_GOOGLE_CLIENT_ID',
+            callback: handleGoogleSignup
+        });
+        google.accounts.id.prompt();
+    }
+
+    async function handleGoogleSignup(response) {
+        try {
+            const result = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    credential: response.credential
+                })
+            });
+
+            if (result.ok) {
+                window.location.href = '/dashboard';
+            }
+        } catch (error) {
+            console.error('Google signup error:', error);
+            alert('Failed to sign up with Google');
+        }
+    }
+</script>
+</body>
+</html>

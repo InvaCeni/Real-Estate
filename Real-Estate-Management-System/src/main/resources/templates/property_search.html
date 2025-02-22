@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Property Search - VIEWS REAL ESTATE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-inter">
+<!-- Navigation -->
+<nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <div class="flex-shrink-0">
+                <a href="/" class="text-2xl font-bold text-gray-800">VIEWS REAL ESTATE</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="text-gray-700 hover:text-gray-900">Home</a>
+                <a href="/search" class="text-blue-600 hover:text-blue-700">Search Properties</a>
+                <a href="/saved" class="text-gray-700 hover:text-gray-900">Saved</a>
+                <a href="/profile" class="text-gray-700 hover:text-gray-900">Profile</a>
+                <a href="/logout" class="text-red-600 hover:text-red-700">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Find Your Perfect Property</h1>
+        <p class="text-xl text-gray-600">Discover homes that match your lifestyle</p>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <form th:action="@{/search}" method="get" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Location Filter -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Location</label>
+                <select name="location" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Locations</option>
+                    <option th:each="loc : ${locations}" th:value="${loc}" th:text="${loc}">Manhattan</option>
+                </select>
+            </div>
+
+            <!-- Property Type Filter -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Property Type</label>
+                <select name="type" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="">All Types</option>
+                    <option value="house">House</option>
+                    <option value="apartment">Apartment</option>
+                    <option value="condo">Condo</option>
+                    <option value="townhouse">Townhouse</option>
+                    <option value="land">Land</option>
+                </select>
+            </div>
+
+            <!-- Price Range -->
+            <div>
+                <label class="block text-gray-700 font-medium mb-2">Price Range</label>
+                <div class="flex space-x-2">
+                    <input type="number" name="minPrice" placeholder="Min"
+                           class="w-1/2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="number" name="maxPrice" placeholder="Max"
+                           class="w-1/2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="flex items-end">
+                <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Search Properties
+                </button>
+            </div>
+        </div>
+
+        <!-- Advanced Filters (Optional) -->
+        <div class="mt-4">
+            <details class="text-sm text-gray-600">
+                <summary class="cursor-pointer">Advanced Filters</summary>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <!-- Bedrooms -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Bedrooms</label>
+                        <select name="bedrooms" class="w-full px-3 py-2 border rounded-lg">
+                            <option value="">Any</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+
+                    <!-- Bathrooms -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Bathrooms</label>
+                        <select name="bathrooms" class="w-full px-3 py-2 border rounded-lg">
+                            <option value="">Any</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                        </select>
+                    </div>
+
+                    <!-- Square Footage -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Min Square Feet</label>
+                        <input type="number" name="minSquareFeet" placeholder="Sq Ft"
+                               class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+            </details>
+        </div>
+    </form>
+
+    <!-- Search Results -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div th:each="property : ${properties}" class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="h-48 bg-gray-200 relative">
+                <img th:src="${property.imageUrl}" alt="Property Image" class="w-full h-full object-cover">
+                <span class="absolute top-2 right-2 bg-white px-2 py-1 rounded-full text-xs font-semibold"
+                      th:text="${property.type}">Apartment</span>
+            </div>
+            <div class="p-4">
+                <h3 class="text-xl font-semibold text-gray-900 mb-2" th:text="${property.title}">Modern Downtown Apartment</h3>
+                <p class="text-gray-600 mb-2" th:text="${property.location}">Manhattan, New York</p>
+
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-2xl font-bold text-blue-600" th:text="${'$' + #numbers.formatInteger(property.price, 3, 'COMMA')}">$450,000</span>
+                    <div class="flex space-x-2">
+                        <button class="text-gray-600 hover:text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </button>
+                        <button class="text-gray-600 hover:text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 text-center border-t pt-2">
+                    <div>
+                        <span class="block text-gray-600 text-sm">Beds</span>
+                        <span class="font-semibold" th:text="${property.bedrooms}">3</span>
+                    </div>
+                    <div>
+                        <span class="block text-gray-600 text-sm">Baths</span>
+                        <span class="font-semibold" th:text="${property.bathrooms}">2</span>
+                    </div>
+                    <div>
+                        <span class="block text-gray-600 text-sm">Sq Ft</span>
+                        <span class="font-semibold" th:text="${#numbers.formatInteger(property.squareFeet, 3, 'COMMA')}">1,500</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-8 flex justify-center">
+        <nav aria-label="Pagination" class="inline-flex rounded-md shadow-sm -space-x-px">
+            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Previous</span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </a>
+            <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                1
+            </a>
+            <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                2
+            </a>
+            <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                3
+            </a>
+            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                <span class="sr-only">Next</span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </nav>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="bg-white border-t">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">VIEWS REAL ESTATE</h3>
+                <p class="text-gray-600">Your trusted partner in finding the perfect home.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-gray-800 mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">Search Properties</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">About Us</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-gray-800 mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-gray-800 mb-4">Contact</h4>
+                <p class="text-gray-600">
+                <p class="text-gray-600">123 Real Estate Lane</p>
+                <p class="text-gray-600">(555) 123-4567</p>
+                <p class="text-gray-600">info@viewsrealestate.com</p>
+            </div>
+        </div>
+        <div class="mt-8 border-t pt-6 text-center">
+            <p class="text-gray-600">&copy; 2024 VIEWS REAL ESTATE. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Optional JavaScript for Interactivity -->
+<script>
+    // Advanced Filters Toggle
+    document.querySelector('details summary').addEventListener('click', function(e) {
+        const details = e.target.closest('details');
+        details.classList.toggle('open');
+    });
+
+    // Dynamic Price Formatting (Optional)
+    function formatCurrency(input) {
+        // Remove non-numeric characters
+        let value = input.value.replace(/[^\d]/g, '');
+
+        // Format with commas
+        if (value.length > 3) {
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        input.value = value ? '$' + value : '';
+    }
+
+    // Attach event listeners to price inputs
+    document.querySelectorAll('input[name="minPrice"], input[name="maxPrice"]').forEach(input => {
+        input.addEventListener('input', () => formatCurrency(input));
+    });
+</script>
+</body>
+</html>
