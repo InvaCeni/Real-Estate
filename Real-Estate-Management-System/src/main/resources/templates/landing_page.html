@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VIEWS REAL ESTATE</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="font-inter">
+<!-- Hero Section -->
+<section class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Navigation -->
+        <nav class="flex justify-between items-center mb-16">
+            <h1 class="text-2xl font-bold">VIEWS REAL ESTATE</h1>
+            <div class="space-x-6">
+                <a href="/" class="hover:text-blue-600">Home</a>
+                <a href="/login" class="hover:text-blue-600">Log in</a>
+                <a href="/signup" class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800">Sign up</a>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="flex items-center justify-between mb-24">
+            <div class="w-1/2">
+                <h1 class="text-5xl font-bold mb-6">Your Dream House Is One Step Away</h1>
+                <p class="text-gray-600 mb-8">Discover your perfect home with VIEWS REAL ESTATE. We offer a curated selection of premium properties, from luxurious urban apartments to stunning suburban homes.</p>
+                <div class="relative">
+                    <input type="text"
+                           placeholder="Search properties..."
+                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500">
+                    <button class="absolute right-2 top-1/2 transform -translate-y-1/2">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="w-1/2 ml-12">
+                <img src="/api/placeholder/800/600"
+                     alt="Hero Property"
+                     class="rounded-lg shadow-xl w-full h-[400px] object-cover">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Properties -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12">Recent Properties</h2>
+        <div class="grid grid-cols-3 gap-8">
+            <!-- Property 1 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="/api/placeholder/600/400"
+                     alt="Luxury Villa"
+                     class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Luxury Villa</h3>
+                    <p class="text-gray-600 mb-4">Miami Beach, FL</p>
+                    <div class="flex justify-between text-sm text-gray-500 mb-4">
+                        <span>5 Beds</span>
+                        <span>4 Baths</span>
+                        <span>4,500 sqft</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-bold text-blue-600">$2,950,000</span>
+                        <button class="text-blue-600 hover:underline">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property 2 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="/api/placeholder/600/400"
+                     alt="Modern Apartment"
+                     class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Modern Apartment</h3>
+                    <p class="text-gray-600 mb-4">Manhattan, NY</p>
+                    <div class="flex justify-between text-sm text-gray-500 mb-4">
+                        <span>2 Beds</span>
+                        <span>2 Baths</span>
+                        <span>1,200 sqft</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-bold text-blue-600">$1,850,000</span>
+                        <button class="text-blue-600 hover:underline">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Property 3 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img src="/api/placeholder/600/400"
+                     alt="Family Home"
+                     class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <h3 class="text-xl font-bold mb-2">Family Home</h3>
+                    <p class="text-gray-600 mb-4">Beverly Hills, CA</p>
+                    <div class="flex justify-between text-sm text-gray-500 mb-4">
+                        <span>4 Beds</span>
+                        <span>3 Baths</span>
+                        <span>3,200 sqft</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-xl font-bold text-blue-600">$3,450,000</span>
+                        <button class="text-blue-600 hover:underline">Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+        <div class="grid grid-cols-3 gap-12 text-center">
+            <div>
+                <div class="bg-blue-50 w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Property Listings</h3>
+                <p class="text-gray-600">Browse through our extensive collection of residential and commercial properties</p>
+            </div>
+
+            <div>
+                <div class="bg-blue-50 w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Home Valuation</h3>
+                <p class="text-gray-600">Get an accurate estimate of your home's value with our professional valuation services</p>
+            </div>
+
+            <div>
+                <div class="bg-blue-50 w-16 h-16 mx-auto rounded-lg flex items-center justify-center mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Property Management</h3>
+                <p class="text-gray-600">Efficiently manage your rental properties with our comprehensive property management services</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12">Contact Us</h2>
+        <div class="grid grid-cols-2 gap-12">
+            <!-- Contact Form -->
+            <div>
+                <form class="space-y-6">
+                    <input type="text"
+                           placeholder="Name"
+                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500">
+                    <input type="email"
+                           placeholder="Email address"
+                           class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500">
+                    <textarea placeholder="Your message"
+                              rows="4"
+                              class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500"></textarea>
+                    <button type="submit"
+                            class="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800">
+                        SEND
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="space-y-8">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Call Us</h3>
+                        <p>+1 234-567-89</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Email Us</h3>
+                        <p>info@viewsrealestate.com</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">Location</h3>
+                        <p>123 Real Estate Ave, New York, NY 10001</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer -->
+<footer class="bg-black text-white py-4 text-center">
+    <p>Copyright © 2024. All rights reserved.</p>
+</footer>
+</body>
+</html>
+
+
